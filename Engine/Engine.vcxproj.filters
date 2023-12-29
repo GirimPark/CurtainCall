@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="0. pch">
+      <UniqueIdentifier>{e0eb07ba-97e1-4785-8c77-d54cd038a09d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="1. Core">
+      <UniqueIdentifier>{1d880232-ff03-4092-a1d3-5c60077b3a5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="2. Manager">
+      <UniqueIdentifier>{537d4b53-8bc9-443a-b947-d79108a171cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3. World">
+      <UniqueIdentifier>{e4046778-6d0f-457e-9b1d-74117fb31f78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="4. Obejct">
+      <UniqueIdentifier>{d9e3b31d-cf33-45e7-a0cf-9e8913df8b11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="5. Component">
+      <UniqueIdentifier>{2b1d86e4-a4d3-48ad-b445-f2f12288193d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>0. pch</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>0. pch</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonApp.h">
+      <Filter>1. Core</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>0. pch</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper.h">
+      <Filter>0. pch</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>0. pch</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonApp.cpp">
+      <Filter>1. Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Helper.cpp">
+      <Filter>0. pch</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
