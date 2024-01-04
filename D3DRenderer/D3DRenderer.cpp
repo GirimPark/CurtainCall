@@ -5,17 +5,10 @@
 
 #include "../Engine/CommonApp.h"
 
-D3DRenderer::D3DRenderer(HWND hwnd, const WCHAR** VSFiles, const WCHAR** PSFiles, 
-	int screenWidth, int screenHeight)
-	: m_hWnd(hwnd)
-	, m_screenWidth(screenWidth)
+D3DRenderer::D3DRenderer(int screenWidth, int screenHeight)
+	: m_screenWidth(screenWidth)
 	, m_screenHeight(screenHeight)
 {
-	for(int i=0; i<MAX_FILE_NUM; ++i)
-	{
-		m_VSFiles[i] = VSFiles[i];
-		m_PSFiles[i] = PSFiles[i];
-	}
 }
 
 D3DRenderer::~D3DRenderer()
@@ -31,13 +24,9 @@ bool D3DRenderer::Initialize()
 	/// 1. 스왑체인 속성 설정 구조체 생성
 	// https://learn.microsoft.com/ko-kr/windows/win32/api/dxgi/ns-dxgi-dxgi_swap_chain_desc
 	DXGI_SWAP_CHAIN_DESC swapDesc = {};
-#if USE_FLIPMODE == 1
+
 	swapDesc.BufferCount = 2;
 	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;	// Present()호출 후 디스플레이 화면에서 픽셀을 처리하는 옵션
-#else
-	swapDesc.BufferCount = 1;
-	swapDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-#endif
 
 	// BufferDesc : 백 버퍼 표시 모드
 	// BufferDesc - 백버퍼(텍스처)의 가로/세로 크기 설정
@@ -56,18 +45,18 @@ bool D3DRenderer::Initialize()
 	// 백 버퍼의 표면 사용량 및 CPU 액세스 옵션 설명
 	// 해당 단계에서 백버퍼를 출력용으로 선언했기 때문에, RenderTargetView를 생성하는 부분에서 특정 플래그를 사용하지 않아도 된다.
 	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapDesc.OutputWindow = m_hWnd;
+	swapDesc.OutputWindow = CommonApp::GetHwnd();
 	swapDesc.Windowed = TRUE;
 
 
 	/// 2. Device, DeviceContext, SwapChain 생성
-	// https://learn.microsoft.com/ko-kr/windows/win32/api/d3d11/nf-d3d11-d3d11createdeviceandswapchain
+	// https://learn.microsoft.com/ko-kr/windows/w11/nf-d3d11-d3d11createdeviceandswapchain
 	UINT creationFlags = D3D11_CREATE_DEVICE_SINGLETHREADED;
 #ifdef _DEBUG
 	creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 	HR_T(D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, creationFlags, NULL, NULL,
-		D3D11_SDK_VERSION, &swapDesc, &m_pSwapChain, &m_pDevice, NULL, &m_pDeviceContext));
+		D3D11_SDK_VERSION, &swapDesc, m_pSwapChain.GetAddressOf(), m_pDevice.GetAddressOf(), NULL, m_pDeviceContext.GetAddressOf()));
 
 
 	/// 3. RenderTargetView 생성, RTV에 백버퍼 바인딩
@@ -75,13 +64,11 @@ bool D3DRenderer::Initialize()
 	ID3D11Texture2D* pBackBufferTexture = nullptr;
 	HR_T(m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&pBackBufferTexture));
 	// pDesc == NULL일 경우, Mipmap을 사용하지 않는다.
-	HR_T(m_pDevice->CreateRenderTargetView(pBackBufferTexture, NULL, &m_pRenderTargetView));	// 텍스처 내부 참조 증가
+	HR_T(m_pDevice->CreateRenderTargetView(pBackBufferTexture, NULL, m_pRenderTargetView.GetAddressOf()));	// 텍스처 내부 참조 증가
 	SAFE_RELEASE(pBackBufferTexture);
 
-#if USE_FLIPMODE == 0
 	// 렌더 타겟을 최종 출력 파이프라인에 바인딩
-	m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, NULL);
-#endif
+	m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), NULL);
 
 
 	/// 4. 뷰포트 설정, Rasterization 단계에 바인딩
@@ -117,7 +104,7 @@ bool D3DRenderer::Initialize()
 	DSVDesc.Format = depthDesc.Format;
 	DSVDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	DSVDesc.Texture2D.MipSlice = 0;
-	HR_T(m_pDevice->CreateDepthStencilView(textureDepthStencil, &DSVDesc, &m_pDepthStencilView));
+	HR_T(m_pDevice->CreateDepthStencilView(textureDepthStencil, &DSVDesc, m_pDepthStencilView.GetAddressOf()));
 	SAFE_RELEASE(textureDepthStencil);
 
 
@@ -136,25 +123,28 @@ bool D3DRenderer::Initialize()
 
 	for(int i=0; i<MAX_FILE_NUM; ++i)
 	{
-		if(m_VSFiles[i])
+		const WCHAR* VSFile = CommonApp::m_pInstance->GetVSFiles()[i];
+		const WCHAR* PSFile = CommonApp::m_pInstance->GetPSFiles()[i];
+
+		if(VSFile)
 		{
 			ID3DBlob* vertexShaderBuffer = nullptr; // 컴파일된 코드에 액세스할 포인터 변수
-			HR_T(CompileShaderFromFile(m_VSFiles[i], "main", "vs_5_0", &vertexShaderBuffer));
+			HR_T(CompileShaderFromFile(VSFile, "main", "vs_5_0", &vertexShaderBuffer));
 			HR_T(m_pDevice->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(),
-				vertexShaderBuffer->GetBufferSize(), NULL, &m_pVertexShaders[i]));
+				vertexShaderBuffer->GetBufferSize(), NULL, m_pVertexShaders[i].GetAddressOf()));
 
 			HR_T(m_pDevice->CreateInputLayout(layout, ARRAYSIZE(layout),
-				vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &m_pInputLayout));
+				vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), m_pInputLayout.GetAddressOf()));
 
 			SAFE_RELEASE(vertexShaderBuffer);
 		}
 		
-		if(m_PSFiles[i])
+		if(PSFile)
 		{
 			ID3DBlob* pixelShaderBuffer = nullptr;
-			HR_T(CompileShaderFromFile(m_PSFiles[i], "main", "ps_5_0", &pixelShaderBuffer));
+			HR_T(CompileShaderFromFile(PSFile, "main", "ps_5_0", &pixelShaderBuffer));
 			HR_T(m_pDevice->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(),
-				pixelShaderBuffer->GetBufferSize(), NULL, &m_pPixelShaders[i]));
+				pixelShaderBuffer->GetBufferSize(), NULL, m_pPixelShaders[i].GetAddressOf()));
 
 			SAFE_RELEASE(pixelShaderBuffer);
 		}
@@ -170,7 +160,7 @@ bool D3DRenderer::Initialize()
 	sampleDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 	sampleDesc.MinLOD = 0;
 	sampleDesc.MaxLOD = D3D11_FLOAT32_MAX;
-	HR_T(m_pDevice->CreateSamplerState(&sampleDesc, &m_pSamplerLinear));
+	HR_T(m_pDevice->CreateSamplerState(&sampleDesc, m_pSamplerLinear.GetAddressOf()));
 
 	/// 3. blend state 생성
 	D3D11_BLEND_DESC blendDesc = {};
@@ -188,7 +178,7 @@ bool D3DRenderer::Initialize()
 	rtBlendDesc.DestBlendAlpha = D3D11_BLEND_ONE;
 	rtBlendDesc.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 	blendDesc.RenderTarget[0] = rtBlendDesc;
-	HR_T(m_pDevice->CreateBlendState(&blendDesc, &m_pAlphaBlendState));
+	HR_T(m_pDevice->CreateBlendState(&blendDesc, m_pAlphaBlendState.GetAddressOf()));
 
 	return true;
 }

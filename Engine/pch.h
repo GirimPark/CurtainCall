@@ -10,14 +10,25 @@
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
 #include "define.h"
+#include "Helper.h"
 
 #include <Windows.h>
+#include <wrl/client.h>
 
 #include <d3d11.h>
+#include <DirectXMath.h>
 #include <directxtk/SimpleMath.h>
+
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
 
 #include <memory>
 #include <string>
 #include <vector>
+#include <iostream>
+
+namespace Math = DirectX::SimpleMath;
+using namespace DirectX;
+using namespace Microsoft::WRL;
 
 #endif //PCH_H

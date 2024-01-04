@@ -41,9 +41,9 @@ GameApp::GameApp(HINSTANCE hInstance)
 
 bool GameApp::Initialize()
 {
-	m_PSFiles[0] = L"StaticVertexShader";
-	m_PSFiles[1] = L"SkeletalVertexShader";
-	m_VSFiles[0] = L"PBRPixelShader";
+	m_VSFiles[0] = L"StaticVertexShader.hlsl";
+	m_VSFiles[1] = L"SkeletalVertexShader.hlsl";
+	m_PSFiles[0] = L"PBRPixelShader.hlsl";
 
 	QueryPerformanceFrequency(&m_frequency);
 	QueryPerformanceCounter(&m_previousTime);

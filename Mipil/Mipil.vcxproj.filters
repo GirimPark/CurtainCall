@@ -13,6 +13,9 @@
     <Filter Include="3. Object">
       <UniqueIdentifier>{774a0ed4-4a62-4f59-aa32-ab98a64d3007}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{04ae1fa4-b19e-4791-b451-481de5cbac2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h">
@@ -26,5 +29,16 @@
     <ClCompile Include="GameApp.cpp">
       <Filter>1. Core</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="StaticVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="SkeletalVertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="PBRPixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

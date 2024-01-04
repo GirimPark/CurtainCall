@@ -5,7 +5,7 @@
 
 using namespace Microsoft::WRL;
 
-const int MAX_FILE_NUM = 5;
+constexpr int MAX_FILE_NUM = 5;
 
 /// <summary>
 /// Renderer를 싱글톤으로 만들지 않기위해 싱글톤인 CommonApp(Core)를 활용한다.
@@ -27,11 +27,6 @@ private:
 	ComPtr<ID3D11SamplerState> m_pSamplerLinear = nullptr;		// 샘플러 상태
 	ComPtr<ID3D11BlendState> m_pAlphaBlendState = nullptr;		// 블렌더 상태
 
-	const HWND m_hWnd;
-
-	const WCHAR* m_VSFiles[MAX_FILE_NUM];
-	const WCHAR* m_PSFiles[MAX_FILE_NUM];
-
 	const int m_screenWidth;
 	const int m_screenHeight;
 
@@ -41,7 +36,7 @@ public:
 	ComPtr<IDXGISwapChain> GetSwapChain() { return m_pSwapChain; }
 
 public:
-	D3DRenderer(HWND hwnd, const WCHAR** VSFiles, const WCHAR** PSFiles, int screenWidth, int screenHeight);
+	D3DRenderer(int screenWidth, int screenHeight);
 	~D3DRenderer();
 
 public:

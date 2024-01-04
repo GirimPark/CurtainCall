@@ -3,10 +3,7 @@
 #include <Windows.h>
 #include <d3d11.h>
 #include <memory>
-#include <wrl/client.h>
 #include "../D3DRenderer/D3DRenderer.h"
-
-using namespace Microsoft::WRL;
 
 const int MAX_LOADSTRING = 100;
 
@@ -21,10 +18,11 @@ class CommonApp
 {
 /// Window 자원
 public:
-	static HWND m_hWnd;
 	static CommonApp* m_pInstance;	// 매 프레임 돌아야하기 때문에 public으로 선언
 
 protected:
+	static HWND m_hWnd;
+
 	HACCEL m_hAccelTable;
 	MSG m_msg;
 	HINSTANCE m_hInstance;
@@ -45,10 +43,12 @@ protected:
 	const WCHAR* m_PSFiles[MAX_FILE_NUM];
 
 public:
+	static HWND GetHwnd() { return m_hWnd; }
 	std::shared_ptr<D3DRenderer> GetRenderer() const { return m_pD3DRenderer; }
 	ComPtr<ID3D11Device> GetDevice() const { return m_pDevice; }
 	ComPtr<ID3D11DeviceContext> GetDevcon() const { return m_pDeviceContext; }
-	
+	const WCHAR** GetVSFiles() { return m_VSFiles; }
+	const WCHAR** GetPSFiles() { return m_PSFiles; }
 
 protected:
 	CommonApp(HINSTANCE hInstance);

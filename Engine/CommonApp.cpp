@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "CommonApp.h"
 
-#include "Helper.h"
-
 #include "../D3DRenderer/D3DRenderer.h"
 
 #ifdef ENGINE_DEBUG
@@ -34,7 +32,7 @@ CommonApp::CommonApp(HINSTANCE hInstance)
     m_wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
     m_wcex.lpszClassName = m_szWindowClass;
 
-    m_pD3DRenderer = std::make_shared<D3DRenderer>(m_hWnd, m_VSFiles, m_PSFiles, ScreenWidth, ScreenHeight);
+    m_pD3DRenderer = std::make_shared<D3DRenderer>(ScreenWidth, ScreenHeight);
 }
 
 bool CommonApp::Initialize()

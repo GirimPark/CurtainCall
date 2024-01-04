@@ -19,6 +19,9 @@
     <Filter Include="5. Component">
       <UniqueIdentifier>{2b1d86e4-a4d3-48ad-b445-f2f12288193d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="5. Component\MixIn Components">
+      <UniqueIdentifier>{282d7584-0d32-48c0-b512-1682ac16464c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -36,6 +39,9 @@
     <ClInclude Include="Helper.h">
       <Filter>0. pch</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>5. Component\MixIn Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -46,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="Helper.cpp">
       <Filter>0. pch</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>5. Component\MixIn Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
