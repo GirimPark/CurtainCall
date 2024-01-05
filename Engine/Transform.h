@@ -7,6 +7,12 @@ protected:
 
 	Transform* m_pParent = nullptr;
 
-	//void SetParent(Transform* )
+	Transform();
+	~Transform() = default;
+
+	Math::Vector3 GetWorldPosition() const;
+	void SetParent(Transform* pParent) { m_pParent = pParent; }
+
+	virtual void Update(float deltaTime);
 };
 
