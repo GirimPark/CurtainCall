@@ -54,6 +54,9 @@
     <ClInclude Include="Component.h">
       <Filter>5. Component</Filter>
     </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>3. World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -76,6 +79,9 @@
     </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>5. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>3. World</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

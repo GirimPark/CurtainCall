@@ -4,6 +4,18 @@
 
 class GameObject;
 
+/// <summary>
+/// 가장 상위의 Component
+/// Component의 공통 정보인 부모 오브젝트, 이름을 가진다.
+/// 대략적인 Component 구조는 아래와 같다.
+/// Component
+///   -SceneComponent
+///     -CameraComponent
+///     -RenderComponent
+///       -RenderableComponents...
+///   -MoveComponent
+///   -FSMComponent
+/// </summary>
 class Component
 	: public Object
 {

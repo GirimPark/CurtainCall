@@ -10,7 +10,7 @@
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
 #include "define.h"
-#include "Helper.h"
+#include "../D3DRenderer/Helper.h"
 
 #include <Windows.h>
 #include <wrl/client.h>
