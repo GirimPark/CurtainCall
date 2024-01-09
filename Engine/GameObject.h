@@ -47,5 +47,32 @@ public:
 	SceneComponent* GetRootComponent() const { return m_pRootComponent; }
 
 	Component* GetComponent(std::string_view name) const;
-	
+
+public:
+	virtual void Initialize();
+	virtual void Update(float deltaTime);
+
+public:
+	template <typename T>
+	T* CreateComponent(std::string_view name)
+	{
+		// TODO
+		// temp에 대한 누수?
+		// T* 타입 리턴인데 World쪽은 흠
+		// assert warning
+		T* temp = new T;
+		Component* component = dynamic_cast<Component*>(temp);
+		assert(component, L"GameObject.h, CreateComponent() : dynamic_cast assertion");
+
+		int keyIdx = m_ownComponents.size();
+		m_componentMap.emplace(name, keyIdx);
+
+		//component->SetName(name);
+		//component->SetOwner(this);
+
+
+		m_ownComponents.emplace_back(component);
+
+		return component;
+	}
 };

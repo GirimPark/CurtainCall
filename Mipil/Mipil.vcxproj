@@ -21,9 +21,11 @@
   <ItemGroup>
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="TestWorld.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="TestWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\D3DRenderer\D3DRenderer.vcxproj">

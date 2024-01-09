@@ -24,10 +24,16 @@
     <ClInclude Include="framework.h">
       <Filter>0. Configuration</Filter>
     </ClInclude>
+    <ClInclude Include="TestWorld.h">
+      <Filter>2. World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameApp.cpp">
       <Filter>1. Core</Filter>
+    </ClCompile>
+    <ClCompile Include="TestWorld.cpp">
+      <Filter>2. World</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

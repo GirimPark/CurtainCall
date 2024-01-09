@@ -57,7 +57,7 @@ public:
 		gameObj->SetOwnerWorld(this);
 
 		std::shared_ptr<GameObject> sharedObj = std::make_shared<GameObject>(*gameObj);
-		m_gameObjects[static_cast<int>(objectType)].push_back(sharedObj);
+		m_gameObjects[static_cast<int>(objectType)].emplace_back(sharedObj);
 
 		delete obj;
 		delete gameObj;
